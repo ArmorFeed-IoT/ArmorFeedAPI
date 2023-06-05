@@ -179,4 +179,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+WebSocketOptions options = new() { KeepAliveInterval = TimeSpan.FromSeconds(120) };
+
+app.UseWebSockets(options);
+
 app.Run();

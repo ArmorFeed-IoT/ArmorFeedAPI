@@ -26,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Geolocation\Server\" />
       <Folder Include="Payments\Mapping" />
       <Folder Include="Payments\Persistence\Contexts" />
       <Folder Include="Security\Controllers" />
