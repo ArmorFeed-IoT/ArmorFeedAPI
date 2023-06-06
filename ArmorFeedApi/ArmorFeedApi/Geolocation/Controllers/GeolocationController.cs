@@ -9,12 +9,13 @@ namespace ArmorFeedApi.Geolocation.Controllers
 {
     public class GeolocationController: ControllerBase
     {
-        private readonly GeolocationSocketManager _socketManager = new GeolocationSocketManager();
+        private static GeolocationSocketManager _socketManager;
         private readonly ILogger _logger;
 
-        public GeolocationController(ILogger<GeolocationController> logger)
+        public GeolocationController(ILogger<GeolocationController> logger, ILogger<GeolocationSocketManager> socketManagerLogger)
         {
             _logger = logger;
+            GeolocationController._socketManager = new GeolocationSocketManager(socketManagerLogger);
         }
 
         [HttpGet("/ws/{connectionId}")]
@@ -58,8 +59,9 @@ namespace ArmorFeedApi.Geolocation.Controllers
                     LocationData locationData = new(latitude, longitude, height);
 
                     _logger.LogInformation("Data sent by client is latitude: {}, longitude: {}, height: {}, customerId: {}, enterpriseId: {}", latitude, longitude, height, customerId, enterpriseId);
-                    //await SendMessageToClient(customerId, locationData);
-                    //await SendMessageToClient(enterpriseId, locationData);
+
+                    await SendMessageToClient(customerId, locationData);
+                    await SendMessageToClient(enterpriseId, locationData);
                     
                 }
                 else if (result.MessageType == WebSocketMessageType.Close)
