@@ -1,5 +1,4 @@
 ﻿
-
 using ArmorFeedApi.Enterprises.Domain.Models;
 
 namespace ArmorFeedApi.Vehicles.Domain.Models;
@@ -13,6 +12,8 @@ public class Vehicle
     public string Model { get; set; }
     public string MaintenanceDate { get; set; }
     public string VehicleType { get; set; }
+    
+    public string Image { get; set; }
     
     //Relationships
     public int EnterpriseId { get; set; }
