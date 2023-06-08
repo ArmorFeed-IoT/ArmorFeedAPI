@@ -28,8 +28,8 @@ public class ShipmentDriverService : IShipmentDriverService
     public async Task<AuthenticateShipmentDriverResponse> Authenticate(AuthenticateRequest request)
     {
         var user = await _shipmentDriverRepository.FindByEmailAsync(request.Email);
-        Console.WriteLine($"Request: {request.Email}, {request.Password}");
-        Console.WriteLine($"User: {user.Id}, {user.Name}, {user.PhoneNumber}, {user.Description}, {user.Ruc}, {user.Email}, {user.PasswordHash}");
+        //Console.WriteLine($"Request: {request.Email}, {request.Password}");
+        //Console.WriteLine($"User: {user.Id}, {user.Name}, {user.PhoneNumber}, {user.Description}, {user.Ruc}, {user.Email}, {user.PasswordHash}");
         
         //Perform validation
         if (user==null || !BCrypt.Net.BCrypt.Verify(request.Password,user.PasswordHash))
