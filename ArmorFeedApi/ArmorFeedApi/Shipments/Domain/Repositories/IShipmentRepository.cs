@@ -11,4 +11,5 @@ public interface IShipmentRepository
     void Remove(Shipment shipment);
     Task<IEnumerable<Shipment>> FindByEnterpriseId(int enterpriseId);
     Task<IEnumerable<Shipment>> FindByCustomerId(int customerId);
+    Task<IEnumerable<Shipment>> FindByShipmentDriverId(int shipmentDriverId);
 }

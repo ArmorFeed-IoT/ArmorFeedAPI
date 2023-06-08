@@ -12,6 +12,7 @@ public class VehicleResource
     public string Model { get; set; }
     public string MaintenanceDate { get; set; }
     public string VehicleType { get; set; }
+    public string Image { get; set; }
     public EnterpriseResource Enterprise;
 
 }

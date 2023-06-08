@@ -31,4 +31,7 @@ public class Shipment
     public int CustomerId { get; set; }
     public Customer Customer { get; set; }
     public IList<Comment> Comments { get; set; } = new List<Comment>();
+
+    public ShipmentDriver.Domain.Models.ShipmentDriver? ShipmentDriver { get; set; }
+    public int? ShipmentDriverId { get; set; }
 }

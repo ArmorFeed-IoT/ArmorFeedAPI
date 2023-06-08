@@ -23,6 +23,11 @@ using ArmorFeedApi.Security.Authorization.Handlers.Implementations;
 using ArmorFeedApi.Security.Authorization.Handlers.Interfaces;
 using ArmorFeedApi.Security.Authorization.Middleware;
 using ArmorFeedApi.Security.Authorization.Settings;
+using ArmorFeedApi.ShipmentDriver.Domain.Models;
+using ArmorFeedApi.ShipmentDrivers.Domain.Repositories;
+using ArmorFeedApi.ShipmentDrivers.Domain.Services;
+using ArmorFeedApi.ShipmentDrivers.Persistence.Repository;
+using ArmorFeedApi.ShipmentDrivers.Services;
 using ArmorFeedApi.Shipments.Domain.Repositories;
 using ArmorFeedApi.Shipments.Domain.Services;
 using ArmorFeedApi.Shipments.Persistence.Repositories;
@@ -114,10 +119,14 @@ builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IShipmentRepository, ShipmentRepository>();
 builder.Services.AddScoped<IShipmentService, ShipmentService>();
+builder.Services.AddScoped<IShipmentDriverRepository, ShipmentDriverRepository>();
+builder.Services.AddScoped<IShipmentDriverService, ShipmentDriverService>();
+
 
 // Security Injection Configuration
 builder.Services.AddScoped<IJwtHandler<Customer>, JwtHandlerCustomer>();
 builder.Services.AddScoped<IJwtHandler<Enterprise>, JwtHandlerEnterprise>();
+builder.Services.AddScoped<IJwtHandler<ShipmentDriver>, JwtHandlerShipmentDriver>();
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -134,7 +143,9 @@ builder.Services.AddAutoMapper(
     typeof(ArmorFeedApi.Customers.Mapping.ModelToResourceProfile),
     typeof(ArmorFeedApi.Customers.Mapping.ResourceToModelProfile),
     typeof(ArmorFeedApi.Enterprises.Mapping.ModelToResourceProfile),
-    typeof(ArmorFeedApi.Enterprises.Mapping.ResourceToModelProfile));
+    typeof(ArmorFeedApi.Enterprises.Mapping.ResourceToModelProfile),
+    typeof(ArmorFeedApi.ShipmentDrivers.Mapping.ModelToResourceProfile),
+    typeof(ArmorFeedApi.ShipmentDrivers.Mapping.ResourceToModelProfile));
 
 
 var app = builder.Build();
@@ -150,7 +161,7 @@ using (var context = scope.ServiceProvider.GetRequiredService<AppDbContext>())
 
 // Configure the HTTP request pipeline.
 
-if (app.Environment.IsProduction())
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
@@ -159,6 +170,7 @@ if (app.Environment.IsProduction())
             options.RoutePrefix = "swagger";
         });
 }
+
 
 //Configure CORS
 app.UseCors(x => x

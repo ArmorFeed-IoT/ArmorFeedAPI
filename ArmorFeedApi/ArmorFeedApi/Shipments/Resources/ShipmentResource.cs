@@ -22,4 +22,5 @@ public class ShipmentResource
     public double CurrentLongitude { get; set; }
     public int EnterpriseId { get; set; }
     public int CustomerId { get; set; }
+    public int ShipmentDriverId { get; set; }
 }

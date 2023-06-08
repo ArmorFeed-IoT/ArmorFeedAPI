@@ -60,4 +60,6 @@ public class SaveShipmentResource
     
     [Required]
     public int CustomerId { get; set; }
+    
+    public int ShipmentDriverId { get; set; }
 }

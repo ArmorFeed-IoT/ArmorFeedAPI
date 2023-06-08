@@ -53,4 +53,12 @@ public class ShipmentRepository: BaseRepository, IShipmentRepository
             .Include(s => s.Customer)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Shipment>> FindByShipmentDriverId(int shipmentDriverId)
+    {
+        return await _context.Shipments
+            .Include(s => s.ShipmentDriver)
+            .Where(s => s.ShipmentDriverId == shipmentDriverId)
+            .ToListAsync();
+    }
 }
