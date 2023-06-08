@@ -30,7 +30,6 @@
       <Folder Include="Security\Controllers" />
       <Folder Include="Security\Persistence\Repositories" />
       <Folder Include="Security\Services" />
-      <Folder Include="ShipmentDrivers\Authorization\" />
     </ItemGroup>
 
 </Project>

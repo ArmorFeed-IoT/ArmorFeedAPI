@@ -147,6 +147,10 @@ public class AppDbContext: DbContext
         builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.Name);
         builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.PasswordHash);
         builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.PhoneNumber);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>()
+            .HasMany(driver => driver.Shipments)
+            .WithOne(shipment => shipment.ShipmentDriver)
+            .HasForeignKey(shipment => shipment.ShipmentDriverId).IsRequired(false); // Nullable FK
 
         #endregion
         
