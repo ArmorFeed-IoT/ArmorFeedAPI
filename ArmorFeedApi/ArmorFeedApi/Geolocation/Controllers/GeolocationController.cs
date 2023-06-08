@@ -9,13 +9,12 @@ namespace ArmorFeedApi.Geolocation.Controllers
 {
     public class GeolocationController: ControllerBase
     {
-        private static GeolocationSocketManager _socketManager;
+        private static GeolocationSocketManager _socketManager = new GeolocationSocketManager();
         private readonly ILogger _logger;
 
-        public GeolocationController(ILogger<GeolocationController> logger, ILogger<GeolocationSocketManager> socketManagerLogger)
+        public GeolocationController(ILogger<GeolocationController> logger)
         {
             _logger = logger;
-            GeolocationController._socketManager = new GeolocationSocketManager(socketManagerLogger);
         }
 
         [HttpGet("/ws/{connectionId}")]

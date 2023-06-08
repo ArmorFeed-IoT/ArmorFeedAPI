@@ -52,7 +52,9 @@ public class SaveShipmentResource
     
     [Required]
     public int Status { get; set; }
-    
+    public double CurrentLatitude { get; set; }
+    public double CurrentLongitude { get; set; }
+
     [Required]
     public int EnterpriseId { get; set; }
     

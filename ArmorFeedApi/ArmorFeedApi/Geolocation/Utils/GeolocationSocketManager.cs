@@ -9,8 +9,8 @@ namespace ArmorFeedApi.Geolocation.Utils
     {
         private readonly ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
         private readonly ILogger _logger;
-        public GeolocationSocketManager(ILogger<GeolocationSocketManager> logger) { 
-            _logger = logger;
+        public GeolocationSocketManager() { 
+            _logger = LoggerFactory.Create(logging => logging.AddConsole()).CreateLogger<GeolocationSocketManager>();
         }
         public void AddSocket(string connectionId, WebSocket socket)
         {
@@ -29,8 +29,7 @@ namespace ArmorFeedApi.Geolocation.Utils
                 string message = JsonConvert.SerializeObject(data);
                 byte[] buffer = Encoding.UTF8.GetBytes(message);
                 await socket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-            }
-            _logger.LogInformation("Socket with connection Id {} was not found", connectionId);
+            }else _logger.LogInformation("Socket with connection Id {} was not found", connectionId);
         }
     }
 }

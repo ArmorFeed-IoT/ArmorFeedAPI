@@ -18,6 +18,8 @@ public class ShipmentResource
     public string DestinyAddress { get; set; }
     public string DestinyUrbanization { get; set; }
     public string DestinyReference { get; set; }
+    public double CurrentLatitude { get; set; }
+    public double CurrentLongitude { get; set; }
     public int EnterpriseId { get; set; }
     public int CustomerId { get; set; }
 }
