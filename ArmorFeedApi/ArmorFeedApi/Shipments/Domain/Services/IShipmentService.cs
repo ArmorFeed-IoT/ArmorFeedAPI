@@ -12,4 +12,5 @@ public interface IShipmentService
     Task<ShipmentResponse> DeleteAsync(int id);
     Task<IEnumerable<Shipment>> ListByEnterpriseId(int enterpriseId);
     Task<IEnumerable<Shipment>> ListByCustomerId(int customerId);
+    Task<IEnumerable<Shipment>> ListByShipmentDriverId(int shipmentDriverId);
 }

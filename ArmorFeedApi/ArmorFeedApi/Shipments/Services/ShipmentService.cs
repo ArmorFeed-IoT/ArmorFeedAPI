@@ -36,6 +36,10 @@ public class ShipmentService: IShipmentService
     {
         return await _shipmentRepository.FindByCustomerId(customerId);
     }
+    public async Task<IEnumerable<Shipment>> ListByShipmentDriverId(int shipmentDriverId)
+    {
+        return await _shipmentRepository.FindByShipmentDriverId(shipmentDriverId);
+    }
 
     public async Task<ShipmentResponse> SaveAsync(Shipment shipment)
     {

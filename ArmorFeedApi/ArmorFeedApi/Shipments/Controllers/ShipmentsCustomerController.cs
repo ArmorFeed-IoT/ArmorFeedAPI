@@ -17,8 +17,9 @@ public class ShipmentsCustomerController
         _shipmentService = shipmentService;
         _mapper = mapper;
     }
-    
+
     [HttpGet]
+    [Route("api/v1/customers/{customerId}/shipments")]
     public async Task<IEnumerable<ShipmentResource>> GetAllByEnterpriseId(int customerId)
     {
         var shipments = await _shipmentService.ListByCustomerId(customerId);
