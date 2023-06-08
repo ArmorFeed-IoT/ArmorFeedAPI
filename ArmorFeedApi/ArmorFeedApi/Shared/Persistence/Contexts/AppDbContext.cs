@@ -24,7 +24,8 @@ public class AppDbContext: DbContext
 
     public DbSet<Customer> Customers{ get; set; }
     public DbSet<Comment> Comments { get; set; }
-    
+    public DbSet<ShipmentDriver.Domain.Models.ShipmentDriver?> ShipmentDrivers { get; set; } 
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -131,6 +132,21 @@ public class AppDbContext: DbContext
 
     //RelationShips
 
+
+        #endregion
+
+        #region ShipmentDriver
+
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().ToTable("ShipmentDriver");
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().HasKey(shipmentDriver => shipmentDriver.Id);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.Id);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.Description);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.Email);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.Ruc);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.Photo);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.Name);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.PasswordHash);
+        builder.Entity<ShipmentDriver.Domain.Models.ShipmentDriver>().Property(shipmentDriver => shipmentDriver.PhoneNumber);
 
         #endregion
         

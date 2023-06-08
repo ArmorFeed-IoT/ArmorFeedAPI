@@ -1,3 +1,4 @@
+using ArmorFeedApi.Customers.Domain.Models;
 using ArmorFeedApi.Security.Domain.Models;
 
 namespace ArmorFeedApi.Security.Domain.Respositories;
