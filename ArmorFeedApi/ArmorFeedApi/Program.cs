@@ -126,6 +126,7 @@ builder.Services.AddScoped<IShipmentDriverService, ShipmentDriverService>();
 // Security Injection Configuration
 builder.Services.AddScoped<IJwtHandler<Customer>, JwtHandlerCustomer>();
 builder.Services.AddScoped<IJwtHandler<Enterprise>, JwtHandlerEnterprise>();
+builder.Services.AddScoped<IJwtHandler<ShipmentDriver>, JwtHandlerShipmentDriver>();
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -168,6 +169,17 @@ if (app.Environment.IsProduction())
             options.SwaggerEndpoint("v1/swagger.json", "v1");
             options.RoutePrefix = "swagger";
         });
+}
+
+// Configure the Http request pipeline for Development
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("v1/swagger.json", "v0");
+        options.RoutePrefix = "swagger";
+    });
 }
 
 //Configure CORS
