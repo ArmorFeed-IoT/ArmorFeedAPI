@@ -11,6 +11,8 @@ public class SavePaymentResource
     public string Currency { get; set; }
     [Required]
     public string PaymentDate { get; set; }
+
+    [Required] public string Status { get; set; } = "Registed";
     [Required]
     public int ShipmentId { get; set; }
 }
