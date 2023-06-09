@@ -19,6 +19,7 @@ namespace ArmorFeedApi.Geolocation.Utils
 
         public void RemoveSocket(string connectionId)
         {
+            _logger.LogInformation("Socket connection was closed");
             _sockets.TryRemove(connectionId, out _);
         }
 
