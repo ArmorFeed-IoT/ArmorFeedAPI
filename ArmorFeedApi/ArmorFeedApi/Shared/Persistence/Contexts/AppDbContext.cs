@@ -45,9 +45,9 @@ public class AppDbContext: DbContext
             
             string insertRowQuery = @"
             INSERT INTO armorfeed.sequence (nombre, valor)
-            SELECT 'mi_secuencia', 1
+            SELECT 'mi_secuencia', 0
             WHERE NOT EXISTS (
-                SELECT 1 FROM armorfeed.sequence WHERE nombre = 'mi_secuencia'
+                SELECT 0 FROM armorfeed.sequence WHERE nombre = 'mi_secuencia'
             );";
 
             Database.ExecuteSqlRaw(insertRowQuery);
