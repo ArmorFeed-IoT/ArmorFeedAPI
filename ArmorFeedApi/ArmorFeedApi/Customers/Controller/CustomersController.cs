@@ -52,6 +52,7 @@ public class CustomersController: ControllerBase
         var resource = _mapper.Map<Customer, CustomerResource>(user);
         return Ok(resource);
     }
+    [AllowAnonymous]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAsync(int id, UpdateCustomerRequest request)
     {
