@@ -6,6 +6,7 @@ using ArmorFeedApi.Security.Authorization.Handlers.Interfaces;
 using ArmorFeedApi.Security.Domain.Services.Communication;
 using ArmorFeedApi.Security.Exceptions;
 using ArmorFeedApi.Shared.Domain.Repositories;
+using ArmorFeedApi.Shared.Services;
 using AutoMapper;
 using BCryptNet = BCrypt.Net.BCrypt;
 
@@ -13,37 +14,39 @@ namespace ArmorFeedApi.Customers.Services;
 
 public class CustomerService:  ICustomerService
 {
-     private readonly ICustomerRepository _customerRepository;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IJwtHandler<Customer> _jwtHandler;
+    private readonly SequenceService _sequenceService;
 
-    public CustomerService(ICustomerRepository customerRepository, IUnitOfWork unitOfWork, IMapper mapper, IJwtHandler<Customer> jwtHandler)
+    public CustomerService(ICustomerRepository customerRepository, IUnitOfWork unitOfWork, IMapper mapper, IJwtHandler<Customer> jwtHandler, SequenceService sequenceService)
     {
         _customerRepository = customerRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _jwtHandler = jwtHandler;
+        _sequenceService = sequenceService;
     }
 
     public async Task<AuthenticateCustomerResponse> Authenticate(AuthenticateRequest request)
     {
         var user = await _customerRepository.FindByEmailAsync(request.Email);
-                                Console.WriteLine($"Request: {request.Email}, {request.Password}");
-                                Console.WriteLine($"User: {user.Id}, {user.Name}, {user.PhoneNumber}, {user.Description}, {user.Ruc}, {user.Email}, {user.PasswordHash}");
-                                
-                                //Perform validation
-                                if (user==null || !BCryptNet.Verify(request.Password,user.PasswordHash))
-                                {
-                                    Console.WriteLine("Authentication Error");
-                                    throw new AppException("Email or password is incorrect.");
-                                }
-                                Console.WriteLine("Authentication succesful. About to generate");
-                                var response = _mapper.Map<AuthenticateCustomerResponse>(user);
-                                Console.WriteLine($"Response: {response.Id}, {response.Name}, {response.PhoneNumber}, {response.Description}, {response.Ruc}, {response.Email}");
-                                response.Token = _jwtHandler.GenerateToken(user);
-                                Console.WriteLine($"Generated token is {response.Token}");
-                                return response;
+        //Console.WriteLine($"Request: {request.Email}, {request.Password}");
+        //Console.WriteLine($"User: {user.Id}, {user.Name}, {user.PhoneNumber}, {user.Description}, {user.Ruc}, {user.Email}, {user.PasswordHash}");
+        
+        //Perform validation
+        if (user==null || !BCryptNet.Verify(request.Password,user.PasswordHash))
+        {
+            Console.WriteLine("Authentication Error");
+            throw new AppException("Email or password is incorrect.");
+        }
+        Console.WriteLine("Authentication succesful. About to generate");
+        var response = _mapper.Map<AuthenticateCustomerResponse>(user);
+        Console.WriteLine($"Response: {response.Id}, {response.Name}, {response.PhoneNumber}, {response.Description}, {response.Ruc}, {response.Email}");
+        response.Token = _jwtHandler.GenerateToken(user);
+        Console.WriteLine($"Generated token is {response.Token}");
+        return response;
     }
 
     public async Task<IEnumerable<Customer>> ListAsync()
@@ -66,6 +69,7 @@ public class CustomerService:  ICustomerService
         
         //Map request to user entity
         var user = _mapper.Map<Customer>(request);
+        user.Id = _sequenceService.IncrementId();
         
         //Hash password
         user.PasswordHash = BCryptNet.HashPassword(request.Password);

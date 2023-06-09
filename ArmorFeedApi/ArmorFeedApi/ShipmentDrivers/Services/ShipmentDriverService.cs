@@ -3,6 +3,7 @@ using ArmorFeedApi.Security.Authorization.Handlers.Interfaces;
 using ArmorFeedApi.Security.Domain.Services.Communication;
 using ArmorFeedApi.Security.Exceptions;
 using ArmorFeedApi.Shared.Domain.Repositories;
+using ArmorFeedApi.Shared.Services;
 using ArmorFeedApi.ShipmentDrivers.Domain.Repositories;
 using ArmorFeedApi.ShipmentDrivers.Domain.Services;
 using ArmorFeedApi.ShipmentDrivers.Domain.Services.Communication;
@@ -16,13 +17,15 @@ public class ShipmentDriverService : IShipmentDriverService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IJwtHandler<ShipmentDriver.Domain.Models.ShipmentDriver> _jwtHandler;
+    private readonly SequenceService _sequenceService;
 
-    public ShipmentDriverService(IShipmentDriverRepository shipmentDriverRepository, IUnitOfWork unitOfWork, IMapper mapper, IJwtHandler<ShipmentDriver.Domain.Models.ShipmentDriver> jwtHandler)
+    public ShipmentDriverService(IShipmentDriverRepository shipmentDriverRepository, IUnitOfWork unitOfWork, IMapper mapper, IJwtHandler<ShipmentDriver.Domain.Models.ShipmentDriver> jwtHandler, SequenceService sequenceService)
     {
         _shipmentDriverRepository = shipmentDriverRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _jwtHandler = jwtHandler;
+        _sequenceService = sequenceService;
     }
 
     public async Task<AuthenticateShipmentDriverResponse> Authenticate(AuthenticateRequest request)
@@ -53,6 +56,7 @@ public class ShipmentDriverService : IShipmentDriverService
         
         //Map request to user entity
         var user = _mapper.Map<ShipmentDriver.Domain.Models.ShipmentDriver>(request);
+        user.Id = _sequenceService.IncrementId();
         
         //Hash password
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);

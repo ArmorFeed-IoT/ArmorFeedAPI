@@ -7,6 +7,8 @@ using ArmorFeedApi.Shared.Extensions;
 using ArmorFeedApi.Shipments.Domain.Models;
 using ArmorFeedApi.Vehicles.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using System.Data;
 
 namespace ArmorFeedApi.Shared.Persistence.Contexts;
 
@@ -25,6 +27,32 @@ public class AppDbContext: DbContext
     public DbSet<Customer> Customers{ get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<ShipmentDriver.Domain.Models.ShipmentDriver?> ShipmentDrivers { get; set; } 
+    public void CreateSequence()
+    {
+        bool tablaExiste = Database.GetDbConnection().GetSchema("Tables").Rows.Cast<DataRow>()
+            .Any(row => row["TABLE_NAME"].ToString() == "sequence");
+
+        if (!tablaExiste)
+        {
+            
+            string createTableQuery = @"
+                CREATE TABLE armorfeed.sequence (
+                    nombre VARCHAR(255) PRIMARY KEY,
+                    valor INT
+                );";
+
+            Database.ExecuteSqlRaw(createTableQuery);
+            
+            string insertRowQuery = @"
+            INSERT INTO armorfeed.sequence (nombre, valor)
+            SELECT 'mi_secuencia', 1
+            WHERE NOT EXISTS (
+                SELECT 1 FROM armorfeed.sequence WHERE nombre = 'mi_secuencia'
+            );";
+
+            Database.ExecuteSqlRaw(insertRowQuery);
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -45,7 +73,7 @@ public class AppDbContext: DbContext
 
         builder.Entity<Customer>().ToTable("Customers");
         builder.Entity<Customer>().HasKey(p => p.Id);
-        builder.Entity<Customer>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Customer>().Property(p => p.Id);
         builder.Entity<Customer>().Property(p => p.Name).IsRequired().HasMaxLength(100);
         builder.Entity<Customer>().Property(p => p.Photo);
         builder.Entity<Customer>().Property(p => p.Ruc).IsRequired().HasMaxLength(50);
@@ -80,7 +108,7 @@ public class AppDbContext: DbContext
 
         builder.Entity<Enterprise>().ToTable("Enterprises");
         builder.Entity<Enterprise>().HasKey(p => p.Id);
-        builder.Entity<Enterprise>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<Enterprise>().Property(p => p.Id);
         builder.Entity<Enterprise>().Property(p => p.Name).IsRequired().HasMaxLength(100);
         builder.Entity<Enterprise>().Property(p => p.Photo);
         builder.Entity<Enterprise>().Property(p => p.Ruc).IsRequired().HasMaxLength(50);

@@ -6,6 +6,7 @@ using ArmorFeedApi.Security.Authorization.Handlers.Interfaces;
 using ArmorFeedApi.Security.Domain.Services.Communication;
 using ArmorFeedApi.Security.Exceptions;
 using ArmorFeedApi.Shared.Domain.Repositories;
+using ArmorFeedApi.Shared.Services;
 using AutoMapper;
 using BCryptNet = BCrypt.Net.BCrypt;
 
@@ -17,14 +18,15 @@ public class EnterpriseService: IEnterpriseService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IJwtHandler<Enterprise> _jwtHandler;
+    private readonly SequenceService _sequenceService;
 
-
-    public EnterpriseService(IEnterpriseRepository enterpriseRepository, IUnitOfWork unitOfWork, IMapper mapper, IJwtHandler<Enterprise> jwtHandler)
+    public EnterpriseService(IEnterpriseRepository enterpriseRepository, IUnitOfWork unitOfWork, IMapper mapper, IJwtHandler<Enterprise> jwtHandler, SequenceService sequenceService)
     {
         _enterpriseRepository = enterpriseRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _jwtHandler = jwtHandler;
+        _sequenceService = sequenceService;
     }
 
     public async Task<AuthenticateEnterpriseResponse> Authenticate(AuthenticateRequest request)
@@ -81,6 +83,7 @@ public class EnterpriseService: IEnterpriseService
         
         //Map request to user entity
         var user = _mapper.Map<Enterprise>(request);
+        user.Id = _sequenceService.IncrementId();
         
         //Hash password
         user.PasswordHash = BCryptNet.HashPassword(request.Password);

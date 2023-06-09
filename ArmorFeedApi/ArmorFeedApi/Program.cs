@@ -40,6 +40,7 @@ using ArmorFeedApi.Vehicles.Services;
 
 using Microsoft.OpenApi.Models;
 using IUnitOfWork = ArmorFeedApi.Shared.Domain.Repositories.IUnitOfWork;
+using ArmorFeedApi.Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -135,6 +136,7 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<SequenceService>();
 
 // AutoMapper Configuration
 builder.Services.AddAutoMapper(
@@ -156,6 +158,8 @@ using (var scope = app.Services.CreateScope())
 using (var context = scope.ServiceProvider.GetRequiredService<AppDbContext>())
 {
     context.Database.EnsureCreated();
+    context.Database.OpenConnection();
+    context.CreateSequence();
 }
 
 

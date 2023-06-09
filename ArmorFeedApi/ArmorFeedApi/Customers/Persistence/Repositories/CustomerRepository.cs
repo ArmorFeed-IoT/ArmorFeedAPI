@@ -2,6 +2,7 @@
 using ArmorFeedApi.Customers.Domain.Repositories;
 using ArmorFeedApi.Shared.Persistence.Contexts;
 using ArmorFeedApi.Shared.Persistence.Repositories;
+using ArmorFeedApi.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArmorFeedApi.Customers.Persistence.Repositories;
