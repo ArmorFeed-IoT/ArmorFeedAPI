@@ -99,4 +99,26 @@ public class ShipmentsController : ControllerBase
 
         return Ok(shipmentResource);
     }
+
+    [HttpPut("{id}")]
+    [SwaggerOperation(
+       Summary = "Update Shipment Location In DataBase",
+       Description = "Update Shipment Location In DataBase",
+       OperationId = "PutShipment",
+       Tags = new[] { "Shipments" }
+   )]
+    public async Task<IActionResult> UpdateShipmentLocation(int id, [FromBody] UpdateShipmentLocationResource resource)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState.GetErrorMessages());
+
+        var result = await _shipmentService.UpdateLocationAsync(id, resource);
+
+        if (!result.Success)
+            return BadRequest(result.Message);
+
+        var shipmentResource = _mapper.Map<Shipment, ShipmentResource>(result.Resource);
+
+        return Ok(shipmentResource);
+    }
 }

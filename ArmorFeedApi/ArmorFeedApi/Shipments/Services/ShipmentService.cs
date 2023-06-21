@@ -3,6 +3,7 @@ using ArmorFeedApi.Shipments.Domain.Models;
 using ArmorFeedApi.Shipments.Domain.Repositories;
 using ArmorFeedApi.Shipments.Domain.Services;
 using ArmorFeedApi.Shipments.Domain.Services.Communications;
+using ArmorFeedApi.Shipments.Resources;
 
 namespace ArmorFeedApi.Shipments.Services;
 
@@ -94,6 +95,29 @@ public class ShipmentService: IShipmentService
         catch (Exception e)
         {
             return new ShipmentResponse($"An error occurred while deleting the shipment: {e.Message}");
+        }
+    }
+
+    public async Task<ShipmentResponse> UpdateLocationAsync(int id, UpdateShipmentLocationResource updateShipmentLocationResource)
+    {
+        var existingShipment = await _shipmentRepository.FindByIdAsync(id);
+
+        if (existingShipment == null)
+            return new ShipmentResponse("Shipment not found");
+
+        existingShipment.CurrentLatitude = updateShipmentLocationResource.CurrentLatitude;
+        existingShipment.CurrentLongitude = updateShipmentLocationResource.CurrentLongitude;
+
+        try
+        {
+            _shipmentRepository.Update(existingShipment);
+            await _unitOfWork.CompleteAsync();
+
+            return new ShipmentResponse(existingShipment);
+        }
+        catch (Exception e)
+        {
+            return new ShipmentResponse($"An error occurred while updating the shipment: {e.Message}");
         }
     }
 }

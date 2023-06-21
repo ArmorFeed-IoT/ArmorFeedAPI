@@ -15,12 +15,12 @@ namespace ArmorFeedApi.Shared.Services
 
             using var command = _context.Database.GetDbConnection().CreateCommand();
             command.CommandText = @"
-                UPDATE armorfeed.sequence
+                UPDATE ksero.sequence
                 SET valor = valor + 1
                 WHERE nombre = 'mi_secuencia';
             
                 SELECT valor
-                FROM armorfeed.sequence
+                FROM ksero.sequence
                 WHERE nombre = 'mi_secuencia';
             ";
 

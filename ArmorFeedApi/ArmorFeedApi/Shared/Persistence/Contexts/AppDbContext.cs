@@ -36,7 +36,7 @@ public class AppDbContext: DbContext
         {
             
             string createTableQuery = @"
-                CREATE TABLE armorfeed.sequence (
+                CREATE TABLE ksero.sequence (
                     nombre VARCHAR(255) PRIMARY KEY,
                     valor INT
                 );";
@@ -44,10 +44,10 @@ public class AppDbContext: DbContext
             Database.ExecuteSqlRaw(createTableQuery);
             
             string insertRowQuery = @"
-            INSERT INTO armorfeed.sequence (nombre, valor)
+            INSERT INTO ksero.sequence (nombre, valor)
             SELECT 'mi_secuencia', 0
             WHERE NOT EXISTS (
-                SELECT 0 FROM armorfeed.sequence WHERE nombre = 'mi_secuencia'
+                SELECT 0 FROM ksero.sequence WHERE nombre = 'mi_secuencia'
             );";
 
             Database.ExecuteSqlRaw(insertRowQuery);
