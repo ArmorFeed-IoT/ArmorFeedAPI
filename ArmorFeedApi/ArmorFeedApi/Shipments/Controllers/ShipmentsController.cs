@@ -100,7 +100,7 @@ public class ShipmentsController : ControllerBase
         return Ok(shipmentResource);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}/location")]
     [SwaggerOperation(
        Summary = "Update Shipment Location In DataBase",
        Description = "Update Shipment Location In DataBase",
