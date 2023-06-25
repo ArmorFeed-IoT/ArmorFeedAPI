@@ -1,4 +1,6 @@
 ﻿using ArmorFeedApi.Shared.Domain.Repositories;
+using ArmorFeedApi.ShipmentDriver.Domain.Models;
+using ArmorFeedApi.ShipmentDrivers.Domain.Repositories;
 using ArmorFeedApi.Shipments.Domain.Models;
 using ArmorFeedApi.Shipments.Domain.Repositories;
 using ArmorFeedApi.Shipments.Domain.Services;
@@ -11,11 +13,13 @@ public class ShipmentService: IShipmentService
 {
     private readonly IShipmentRepository _shipmentRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IShipmentDriverRepository _shipmentDriverRepository;
 
-    public ShipmentService(IShipmentRepository shipmentRepository, IUnitOfWork unitOfWork)
+    public ShipmentService(IShipmentRepository shipmentRepository, IUnitOfWork unitOfWork, IShipmentDriverRepository shipmentDriverRepository)
     {
         _shipmentRepository = shipmentRepository;
         _unitOfWork = unitOfWork;
+        _shipmentDriverRepository = shipmentDriverRepository;
     }
 
     public async Task<IEnumerable<Shipment>> ListAsync()
@@ -64,9 +68,19 @@ public class ShipmentService: IShipmentService
         if (existingShipment == null)
             return new ShipmentResponse("Shipment not found");
 
+        ShipmentDriver.Domain.Models.ShipmentDriver? driver = null;
+        if (shipment.ShipmentDriverId.HasValue)
+        {
+            var existingShipmentDriver = await _shipmentDriverRepository.FindByIdAsync(shipment.ShipmentDriverId.Value);
+            if (existingShipmentDriver == null)
+                return new ShipmentResponse($"Shipment Driver with id {shipment.ShipmentDriverId.Value} not found");
+            driver = existingShipmentDriver;
+        }
+
         existingShipment.DeliveryDate = shipment.DeliveryDate;
         existingShipment.Status = shipment.Status;
-
+        existingShipment.ShipmentDriverId = shipment.ShipmentDriverId;
+        existingShipment.ShipmentDriver = driver;
         try
         {
             _shipmentRepository.Update(existingShipment);
@@ -119,5 +133,10 @@ public class ShipmentService: IShipmentService
         {
             return new ShipmentResponse($"An error occurred while updating the shipment: {e.Message}");
         }
+    }
+
+    public async Task<IEnumerable<Shipment>> ListShipmentWthoutShipmentDriverAsync(int enterpriseId)
+    {
+        return await _shipmentRepository.FindShipmentsWithoutShipmentDriverAsync(enterpriseId);
     }
 }

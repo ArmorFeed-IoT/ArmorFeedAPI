@@ -63,4 +63,12 @@ public class ShipmentDriverController : ControllerBase
         await _shipmentDriverService.DeleteAsync(id);
         return Ok(new { message = "User deleted successfully" });
     }
+
+    [HttpGet("enterprise/{enterpriseId}")]
+    public async Task<IActionResult> GetAllByEnterpriseId(int enterpriseId)
+    {
+        var shipmentDrivers = await _shipmentDriverService.GetAllByEnterpriseId(enterpriseId);
+        var resources = _mapper.Map<IEnumerable<ShipmentDriver.Domain.Models.ShipmentDriver>, IEnumerable<ShipmentDriverResource>>(shipmentDrivers);
+        return Ok(resources);
+    }
 }

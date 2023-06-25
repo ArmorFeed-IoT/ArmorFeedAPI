@@ -61,4 +61,11 @@ public class ShipmentRepository: BaseRepository, IShipmentRepository
             .Where(s => s.ShipmentDriverId == shipmentDriverId)
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<Shipment>> FindShipmentsWithoutShipmentDriverAsync(int enterpriseId)
+    {
+        return await _context.Shipments
+            .Where(s => s.ShipmentDriver == null && s.ShipmentDriverId == null && s.EnterpriseId == enterpriseId)
+            .ToListAsync();
+    }
 }

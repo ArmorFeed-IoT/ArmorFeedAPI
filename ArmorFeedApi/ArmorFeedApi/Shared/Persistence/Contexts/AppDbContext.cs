@@ -181,6 +181,10 @@ public class AppDbContext: DbContext
             .HasMany(driver => driver.Shipments)
             .WithOne(shipment => shipment.ShipmentDriver)
             .HasForeignKey(shipment => shipment.ShipmentDriverId).IsRequired(false); // Nullable FK
+        builder.Entity<Enterprise>()
+            .HasMany(e => e.ShipmentDrivers)
+            .WithOne(sd => sd.Enterprise)
+            .HasForeignKey(sd => sd.EnterpriseId);
 
         #endregion
         

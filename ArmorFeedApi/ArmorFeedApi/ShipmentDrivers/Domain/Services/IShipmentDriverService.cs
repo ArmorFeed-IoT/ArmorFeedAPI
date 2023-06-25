@@ -9,4 +9,5 @@ public interface IShipmentDriverService : IUserService<ShipmentDriver.Domain.Mod
     Task<AuthenticateShipmentDriverResponse> Authenticate(AuthenticateRequest request);
     Task RegisterAsync(RegisterShipmentDriverRequest request);
     Task UpdateAsync(int id, UpdateShipmentDriverRequest request);
+    Task<IEnumerable<ShipmentDriver.Domain.Models.ShipmentDriver>> GetAllByEnterpriseId(int enterpriseId);
 }

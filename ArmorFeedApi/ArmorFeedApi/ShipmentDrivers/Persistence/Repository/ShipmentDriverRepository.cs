@@ -10,7 +10,6 @@ public class ShipmentDriverRepository : BaseRepository, IShipmentDriverRepositor
     public ShipmentDriverRepository(AppDbContext context) : base(context)
     {
     }
-    
     public async Task<IEnumerable<ShipmentDriver.Domain.Models.ShipmentDriver>> ListAsync()
     {
         return await _context.ShipmentDrivers.ToListAsync();
@@ -50,5 +49,11 @@ public class ShipmentDriverRepository : BaseRepository, IShipmentDriverRepositor
     {
         _context.Remove(user);
     }
-    
+
+    public async Task<IEnumerable<ShipmentDriver.Domain.Models.ShipmentDriver>> GetAllByEnterpriseId(int enterpriseId)
+    {
+        return await _context.ShipmentDrivers
+            .Where(sd => sd.EnterpriseId == enterpriseId)
+            .ToListAsync();
+    }
 }

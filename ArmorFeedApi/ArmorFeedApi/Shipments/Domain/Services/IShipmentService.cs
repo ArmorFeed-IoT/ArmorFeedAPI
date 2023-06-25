@@ -15,4 +15,5 @@ public interface IShipmentService
     Task<IEnumerable<Shipment>> ListByEnterpriseId(int enterpriseId);
     Task<IEnumerable<Shipment>> ListByCustomerId(int customerId);
     Task<IEnumerable<Shipment>> ListByShipmentDriverId(int shipmentDriverId);
+    Task<IEnumerable<Shipment>> ListShipmentWthoutShipmentDriverAsync(int enterpriseId);
 }

@@ -121,4 +121,36 @@ public class ShipmentsController : ControllerBase
 
         return Ok(shipmentResource);
     }
+
+    [HttpGet("without-shipment-driver/{enterpriseId}")]
+    [SwaggerOperation(
+        Summary = "Get All Shipments without shipment driver",
+        Description = "Get Existing Shipments In DataBase without shipment driver",
+        OperationId = "GetShipments",
+        Tags = new[] { "Shipments" }
+    )]
+    public async Task<IActionResult> GetAllWithoutShipmentDriver(int enterpriseId)
+    {
+        var shipments = await _shipmentService.ListShipmentWthoutShipmentDriverAsync(enterpriseId);
+        var resources = _mapper.Map<IEnumerable<Shipment>, IEnumerable<ShipmentResource>>(shipments);
+        return Ok(resources);
+    }
+
+    [HttpDelete("{id}")]
+    [SwaggerOperation(
+        Summary = "Delete Shipment Async",
+        Description = "Delete Shipment by id",
+        OperationId = "DeleteShipments",
+        Tags = new[] { "Shipments" }
+    )]
+    public async Task<IActionResult> DeleteAsync(int id)
+    {
+        var result = await _shipmentService.DeleteAsync(id);
+        if (!result.Success)
+            return BadRequest(result.Message);
+        var resource = _mapper.Map<Shipment, ShipmentResource>(result.Resource);
+        return Ok(resource);
+    }
+
+
 }
