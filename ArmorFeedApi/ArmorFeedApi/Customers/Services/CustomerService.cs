@@ -39,7 +39,7 @@ public class CustomerService:  ICustomerService
         if (user==null || !BCryptNet.Verify(request.Password,user.PasswordHash))
         {
             Console.WriteLine("Authentication Error");
-            throw new AppException("Email or password is incorrect.");
+            throw new AppException("Email or password are incorrect. Please check your credentials and try again");
         }
         Console.WriteLine("Authentication succesful. About to generate");
         var response = _mapper.Map<AuthenticateCustomerResponse>(user);
@@ -65,7 +65,7 @@ public class CustomerService:  ICustomerService
     {
         //Validate
         if (_customerRepository.ExitsByEmail(request.Email))
-            throw new AppException($"Email '{request.Email}' is already token");
+            throw new AppException($"Email '{request.Email}' is already taken. Try another one");
         
         //Map request to user entity
         var user = _mapper.Map<Customer>(request);

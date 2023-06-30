@@ -39,7 +39,7 @@ public class EnterpriseService: IEnterpriseService
         if (user==null || !BCryptNet.Verify(request.Password,user.PasswordHash))
         {
             Console.WriteLine("Authentication Error");
-            throw new AppException("Email or password is incorrect.");
+            throw new AppException("Email or password are incorrect. Please check your credentials and try again");
         }
         Console.WriteLine("Authentication succesful. About to generate");
         var response = _mapper.Map<AuthenticateEnterpriseResponse>(user);
