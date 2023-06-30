@@ -130,4 +130,9 @@ public class ShipmentDriverService : IShipmentDriverService
             throw new AppException($"An error occurred while deleting the user: {e.Message}");
         }
     }
+    
+    public async Task<IEnumerable<ShipmentDriver.Domain.Models.ShipmentDriver>> GetAllByEnterpriseId(int enterpriseId)
+    {
+        return await _shipmentDriverRepository.GetAllByEnterpriseId(enterpriseId);
+    }
 }

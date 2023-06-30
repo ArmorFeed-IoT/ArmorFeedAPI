@@ -1,6 +1,8 @@
-﻿namespace ArmorFeedApi.ShipmentDrivers.Resources;
+﻿using ArmorFeedApi.Security.Resources;
 
-public class ShipmentDriverResource
+namespace ArmorFeedApi.ShipmentDrivers.Resources;
+
+public class ShipmentDriverResource: UserResource
 {
-    
+    public int EnterpriseId { get; set; }
 }
